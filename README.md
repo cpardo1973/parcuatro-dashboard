@@ -41,7 +41,7 @@ git clone https://github.com/cpardo1973/parcuatro-dashboard.git
 cd parcuatro-dashboard
 
 # Abrir localmente
-open dashboard.html
+open index.html
 ```
 
 > **Nota:** Los archivos `.xlsx` con datos fuente están excluidos del repositorio por privacidad. El dashboard contiene los datos ya procesados embebidos en el HTML.
@@ -50,7 +50,7 @@ open dashboard.html
 
 ```
 parcuatro-dashboard/
-├── dashboard.html     # Dashboard completo (HTML + CSS + JS embebido)
+├── index.html         # Dashboard completo (HTML + CSS + JS embebido)
 ├── .gitignore
 └── README.md
 ```
