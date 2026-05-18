@@ -2,7 +2,7 @@
 
 Dashboard interactivo para visualizar el historial de operaciones de aromatización: instalaciones, retiros y reemplazos de equipos desde 2014 hasta 2026.
 
-🔗 **[Ver Demo en Vivo](#)** *(se actualiza con el deploy en Vercel)*
+🔗 **[Ver Demo en Vivo](https://parcuatro-dashboard.vercel.app)**
 
 ---
 

@@ -16,3 +16,4 @@ __MACOSX/
 # Node (por si se agrega build tool)
 node_modules/
 .env
+.vercel
