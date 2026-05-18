@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Operacional · Parcuatro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #07071a;
+    --bg2: #0e0e2a;
+    --card: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --purple: #7c3aed;
+    --purple-light: #a78bfa;
+    --cyan: #06b6d4;
+    --cyan-light: #67e8f9;
+    --emerald: #10b981;
+    --amber: #f59e0b;
+    --rose: #f43f5e;
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Gradient orbs background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 28px 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 24px rgba(124,58,237,0.5);
+  }
+
+  .brand-name {
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #fff, var(--purple-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--emerald);
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--emerald);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .date-badge {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ── HERO TITLE ── */
+  .hero {
+    position: relative;
+    z-index: 10;
+    padding: 24px 40px 0;
+  }
+
+  .hero h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--purple-light);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .hero h2 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .hero h2 span {
+    background: linear-gradient(90deg, var(--cyan-light), var(--purple-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    position: relative;
+    z-index: 10;
+    padding: 20px 40px 0;
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--card-border);
+    margin: 0 40px;
+    margin-top: 20px;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    border-radius: 8px 8px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+    border-bottom: none;
+    transition: all 0.2s;
+    background: transparent;
+    letter-spacing: 0.3px;
+    margin-bottom: -1px;
+  }
+
+  .tab:hover { color: var(--text-dim); }
+
+  .tab.active {
+    color: #fff;
+    background: var(--card);
+    border-color: var(--card-border);
+    border-bottom-color: var(--bg);
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .main {
+    position: relative;
+    z-index: 10;
+    padding: 28px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ── SECTION ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  /* ── GLASS CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.3s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(255,255,255,0.14);
+  }
+
+  /* ── KPI CARDS ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .kpi-card {
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid var(--card-border);
+    background: var(--card);
+    backdrop-filter: blur(12px);
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .kpi-card.purple::before { background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+  .kpi-card.cyan::before   { background: linear-gradient(90deg, var(--cyan), var(--cyan-light)); }
+  .kpi-card.emerald::before { background: linear-gradient(90deg, var(--emerald), #6ee7b7); }
+  .kpi-card.amber::before  { background: linear-gradient(90deg, var(--amber), #fcd34d); }
+  .kpi-card.rose::before   { background: linear-gradient(90deg, var(--rose), #fb7185); }
+
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .kpi-value {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .kpi-card.purple .kpi-value { color: var(--purple-light); }
+  .kpi-card.cyan .kpi-value   { color: var(--cyan-light); }
+  .kpi-card.emerald .kpi-value { color: #6ee7b7; }
+  .kpi-card.amber .kpi-value  { color: #fcd34d; }
+  .kpi-card.rose .kpi-value   { color: #fb7185; }
+
+  .kpi-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .kpi-sub strong {
+    font-weight: 700;
+  }
+
+  .kpi-icon {
+    position: absolute;
+    bottom: 16px; right: 20px;
+    font-size: 36px;
+    opacity: 0.1;
+  }
+
+  .kpi-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-top: 6px;
+  }
+
+  .kpi-trend.up {
+    background: rgba(16,185,129,0.15);
+    color: var(--emerald);
+  }
+
+  .kpi-trend.down {
+    background: rgba(244,63,94,0.15);
+    color: var(--rose);
+  }
+
+  .kpi-trend.neutral {
+    background: rgba(245,158,11,0.15);
+    color: var(--amber);
+  }
+
+  /* ── CHART GRID ── */
+  .chart-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .chart-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .chart-grid-60-40 {
+    display: grid;
+    grid-template-columns: 60fr 40fr;
+    gap: 20px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+  }
+
+  /* ── VENDEDOR CARDS ── */
+  .vendedor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .vendedor-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .vendedor-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .vendedor-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .vendedor-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .vendedor-bar-bg {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+
+  .vendedor-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .vendedor-count {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--purple-light);
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--card-border);
+  }
+
+  /* ── NET GROWTH ── */
+  .growth-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .growth-year {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .growth-label {
+    width: 36px;
+    font-weight: 700;
+    color: var(--text-dim);
+  }
+
+  .growth-bar-wrap {
+    flex: 1;
+    height: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .growth-bar {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .growth-bar.positive { background: linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,0.3)); color: #6ee7b7; }
+  .growth-bar.negative { background: linear-gradient(90deg, rgba(244,63,94,0.6), rgba(244,63,94,0.3)); color: #fb7185; }
+
+  .growth-val {
+    width: 45px;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .growth-val.positive { color: var(--emerald); }
+  .growth-val.negative { color: var(--rose); }
+
+  /* ── PANEL VISIBILITY ── */
+  .panel { display: none; }
+  .panel.active { display: flex; flex-direction: column; gap: 24px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .chart-grid-2 { grid-template-columns: 1fr; }
+    .chart-grid-60-40 { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 700px) {
+    header, .hero, .main { padding-left: 16px; padding-right: 16px; }
+    .tabs { margin: 0 16px; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .hero h2 { font-size: 26px; }
+  }
+
+  /* scroll bar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="brand">
+    <div class="brand-icon">🌸</div>
+    <div>
+      <div class="brand-name">PARCUATRO</div>
+      <div class="brand-sub">Aromatización · Dashboard Operacional</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      Datos actualizados
+    </div>
+    <div class="date-badge" id="currentDate"></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Control de Operaciones</h1>
+  <h2>Historial de Servicios <span>2014 – 2026</span></h2>
+</div>
+
+<!-- TABS -->
+<div class="tabs" style="padding:0; margin-top:20px;">
+  <button class="tab active" onclick="showPanel('general',this)">Vista General</button>
+  <button class="tab" onclick="showPanel('mensual',this)">Detalle Mensual</button>
+  <button class="tab" onclick="showPanel('clientes',this)">Clientes & Equipos</button>
+  <button class="tab" onclick="showPanel('crecimiento',this)">Crecimiento</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ─── PANEL: GENERAL ─── -->
+  <div class="panel active" id="panel-general">
+
+    <!-- KPIs -->
+    <div>
+      <div class="section-label">Resumen Histórico Total · 2014–2026</div>
+      <div class="kpi-grid">
+        <div class="kpi-card purple">
+          <div class="kpi-label">Instalaciones</div>
+          <div class="kpi-value counter" data-target="14062">0</div>
+          <div class="kpi-sub">Servicios instalados en total</div>
+          <div class="kpi-trend up">▲ 431 en 2026</div>
+          <div class="kpi-icon">🔧</div>
+        </div>
+        <div class="kpi-card rose">
+          <div class="kpi-label">Retiros</div>
+          <div class="kpi-value counter" data-target="11356">0</div>
+          <div class="kpi-sub">Equipos retirados en total</div>
+          <div class="kpi-trend down">▼ 429 en 2026</div>
+          <div class="kpi-icon">📦</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Reemplazos</div>
+          <div class="kpi-value counter" data-target="5763">0</div>
+          <div class="kpi-sub">Cambios de equipo realizados</div>
+          <div class="kpi-trend neutral">~ 170 en 2026</div>
+          <div class="kpi-icon">🔄</div>
+        </div>
+        <div class="kpi-card emerald">
+          <div class="kpi-label">Flota Activa Est.</div>
+          <div class="kpi-value counter" data-target="2706">0</div>
+          <div class="kpi-sub">Equipos netos en terreno</div>
+          <div class="kpi-trend up">▲ +2 en 2026</div>
+          <div class="kpi-icon">📍</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2026 YTD KPIs -->
+    <div>
+      <div class="section-label">2026 · Año en Curso (Enero–Mayo)</div>
+      <div class="kpi-grid">
+        <div class="kpi-card purple">
+          <div class="kpi-label">Instalaciones YTD</div>
+          <div class="kpi-value counter" data-target="430">0</div>
+          <div class="kpi-sub">vs 1.347 todo 2025</div>
+          <div class="kpi-trend up">32% del año</div>
+          <div class="kpi-icon">📈</div>
+        </div>
+        <div class="kpi-card rose">
+          <div class="kpi-label">Retiros YTD</div>
+          <div class="kpi-value counter" data-target="424">0</div>
+          <div class="kpi-sub">vs 941 todo 2025</div>
+          <div class="kpi-trend neutral">45% del año</div>
+          <div class="kpi-icon">📉</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Reemplazos YTD</div>
+          <div class="kpi-value counter" data-target="170">0</div>
+          <div class="kpi-sub">vs 372 todo 2025</div>
+          <div class="kpi-trend neutral">46% del año</div>
+          <div class="kpi-icon">🔁</div>
+        </div>
+        <div class="kpi-card cyan">
+          <div class="kpi-label">Total Movimientos</div>
+          <div class="kpi-value counter" data-target="1024">0</div>
+          <div class="kpi-sub">operaciones en 5 meses</div>
+          <div class="kpi-trend up">▲ ~205/mes prom.</div>
+          <div class="kpi-icon">⚡</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annual Chart -->
+    <div class="card">
+      <div class="card-title">Evolución Anual de Operaciones · 2014–2026</div>
+      <div class="card-subtitle">Instalaciones, retiros y reemplazos por año (*2026 parcial)</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>Instalaciones</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f43f5e"></span>Retiros</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Reemplazos</span>
+      </div>
+      <div class="chart-wrapper" style="height:280px">
+        <canvas id="annualChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Donut + Vendedores -->
+    <div class="chart-grid-60-40">
+      <div class="card">
+        <div class="card-title">Mix Operacional Total</div>
+        <div class="card-subtitle">Distribución histórica de todos los movimientos</div>
+        <div class="chart-wrapper" style="height:260px">
+          <canvas id="mixChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Vendedores · 2025–2026</div>
+        <div class="card-subtitle">Rendimiento por ejecutivo de cuenta</div>
+        <div class="vendedor-list" id="vendedorList"></div>
+      </div>
+    </div>
+
+  </div><!-- /panel-general -->
+
+
+  <!-- ─── PANEL: MENSUAL ─── -->
+  <div class="panel" id="panel-mensual">
+
+    <!-- Monthly chart -->
+    <div class="card">
+      <div class="card-title">Movimientos Mensuales · Ene 2025 – May 2026</div>
+      <div class="card-subtitle">Tendencia de instalaciones, retiros y reemplazos por mes</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>Instalaciones</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f43f5e"></span>Retiros</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Reemplazos</span>
+      </div>
+      <div class="chart-wrapper" style="height:320px">
+        <canvas id="monthlyChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Monthly breakdown cards -->
+    <div>
+      <div class="section-label">Detalle mensual 2026</div>
+      <div class="kpi-grid" id="monthly2026Cards"></div>
+    </div>
+
+    <!-- Bar chart monthly total -->
+    <div class="card">
+      <div class="card-title">Total de Servicios por Mes · 2025–2026</div>
+      <div class="card-subtitle">Suma de todos los movimientos (instalaciones + retiros + reemplazos)</div>
+      <div class="chart-wrapper" style="height:260px">
+        <canvas id="monthlyTotalChart"></canvas>
+      </div>
+    </div>
+
+  </div><!-- /panel-mensual -->
+
+
+  <!-- ─── PANEL: CLIENTES & EQUIPOS ─── -->
+  <div class="panel" id="panel-clientes">
+
+    <div class="chart-grid-2">
+      <!-- Top clientes -->
+      <div class="card">
+        <div class="card-title">Top 10 Clientes · Histórico Total</div>
+        <div class="card-subtitle">Por número total de movimientos</div>
+        <div class="chart-wrapper" style="height:340px">
+          <canvas id="clientesChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Equipos -->
+      <div class="card">
+        <div class="card-title">Equipos Más Utilizados</div>
+        <div class="card-subtitle">Modelos por número de instalaciones históricas</div>
+        <div class="chart-wrapper" style="height:340px">
+          <canvas id="equiposChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <!-- Comunas -->
+      <div class="card">
+        <div class="card-title">Top 10 Comunas</div>
+        <div class="card-subtitle">Concentración geográfica de instalaciones</div>
+        <div class="chart-wrapper" style="height:300px">
+          <canvas id="comunasChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Detalle clientes donut -->
+      <div class="card">
+        <div class="card-title">Top 10 Clientes · Mix de Servicio</div>
+        <div class="card-subtitle">Instalaciones vs retiros vs reemplazos</div>
+        <div class="chart-wrapper" style="height:300px">
+          <canvas id="clienteMixChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel-clientes -->
+
+
+  <!-- ─── PANEL: CRECIMIENTO ─── -->
+  <div class="panel" id="panel-crecimiento">
+
+    <div class="chart-grid-2">
+      <div class="card">
+        <div class="card-title">Crecimiento Neto de Flota por Año</div>
+        <div class="card-subtitle">Instalaciones menos retiros (variación de equipos en terreno)</div>
+        <div class="chart-wrapper" style="height:300px">
+          <canvas id="netChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Flota Acumulada Estimada</div>
+        <div class="card-subtitle">Equipos activos en terreno a fin de cada año</div>
+        <div class="chart-wrapper" style="height:300px">
+          <canvas id="flotaChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Balance por Año · Instalaciones vs Retiros</div>
+      <div class="card-subtitle">Verde = crecimiento positivo · Rojo = pérdida de flota</div>
+      <div class="growth-bar-container" id="growthBars"></div>
+    </div>
+
+  </div><!-- /panel-crecimiento -->
+
+</div><!-- /main -->
+
+<footer>
+  Datos exportados desde Registro Guías General · 31.194 movimientos registrados · 2014–2026 · Parcuatro Aromatización
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const YEARS = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026*'];
+const INST  = [576,945,1219,1444,1468,1780,760,952,1129,1006,1005,1347,431];
+const RET   = [373,589,708,1008,1022,1749,1144,758,905,749,981,941,429];
+const REMP  = [353,370,687,634,827,777,328,350,224,379,292,372,170];
+const NET   = INST.map((v,i) => v - RET[i]);
+
+let cumFlota = 0;
+const FLOTA_ACUM = INST.map((v,i) => { cumFlota += (v - RET[i]); return cumFlota; });
+
+const MONTHLY_LABELS = ['Ene 25','Feb 25','Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26'];
+const M_INST  = [86,73,89,114,65,119,192,121,87,137,135,129,87,72,94,153,24];
+const M_RET   = [108,73,86,55,56,68,92,64,98,89,69,83,77,76,92,108,71];
+const M_REMP  = [50,41,37,25,20,19,42,38,28,40,17,15,41,47,28,47,7];
+const M_TOTAL = M_INST.map((v,i) => v + M_RET[i] + M_REMP[i]);
+
+const TOP_CLI    = ['Ripley','Entel','Dijon','Pocuro','Wom','Almagro S.A','Copec','Americanino','ServiEstado','BCI'];
+const CLI_INST   = [118,96,164,143,183,106,132,41,100,79];
+const CLI_RET    = [273,200,161,107,54,121,71,80,71,94];
+const CLI_REMP   = [152,109,22,71,21,30,27,84,18,8];
+
+const EQ_LABELS  = ['AQ550','AQ270','AQ570','SR1000','C800','RB','C1000','Draco'];
+const EQ_INST    = [2707,3160,2149,401,828,429,665,517];
+
+const COMUNAS    = ['Las Condes','Providencia','Vitacura','Santiago','Lo Barnechea','La Florida','Ñuñoa','Huechuraba','Viña del Mar','Stgo Centro'];
+const COM_VALS   = [2326,1161,968,615,515,510,446,302,278,274];
+
+const VENDEDORES = [
+  {name:'Andres',    total:1237, inst:542, color:'#7c3aed'},
+  {name:'Cristóbal', total:1228, inst:605, color:'#06b6d4'},
+  {name:'Pardo',     total:860,  inst:466, color:'#10b981'},
+  {name:'Sofía',     total:237,  inst:107, color:'#f59e0b'},
+  {name:'Ana',       total:69,   inst:33,  color:'#f43f5e'},
+  {name:'Sebastián', total:51,   inst:18,  color:'#a78bfa'},
+];
+
+const MONTHS_2026 = [
+  {mes:'Enero',inst:87,ret:77,remp:41},
+  {mes:'Febrero',inst:72,ret:76,remp:47},
+  {mes:'Marzo',inst:94,ret:92,remp:28},
+  {mes:'Abril',inst:153,ret:108,remp:47},
+  {mes:'Mayo',inst:24,ret:71,remp:7},
+];
+
+// ── CHART DEFAULTS ──────────────────────────────────
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.color = '#64748b';
+
+const gridColor = 'rgba(255,255,255,0.05)';
+const baseOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: 'rgba(14,14,42,0.95)',
+      borderColor: 'rgba(255,255,255,0.1)',
+      borderWidth: 1,
+      titleColor: '#e2e8f0',
+      bodyColor: '#94a3b8',
+      padding: 12,
+      titleFont: { weight: '700', size: 13 },
+    }
+  }
+};
+
+// ── DATE ──────────────────────────────────────────────
+const d = new Date();
+document.getElementById('currentDate').textContent =
+  d.toLocaleDateString('es-CL', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+// ── TABS ──────────────────────────────────────────────
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── COUNTER ANIMATION ─────────────────────────────────
+function animateCounters() {
+  document.querySelectorAll('.counter').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const duration = 1800;
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+      el.textContent = Math.round(ease * target).toLocaleString('es-CL');
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+setTimeout(animateCounters, 300);
+
+// ── VENDEDORES LIST ────────────────────────────────────
+const maxV = VENDEDORES[0].total;
+const vList = document.getElementById('vendedorList');
+const initials = n => n.slice(0,2).toUpperCase();
+VENDEDORES.forEach(v => {
+  const pct = Math.round(v.total / maxV * 100);
+  vList.innerHTML += `
+    <div class="vendedor-item">
+      <div class="vendedor-avatar" style="background:${v.color}22;color:${v.color}">${initials(v.name)}</div>
+      <div class="vendedor-info">
+        <div class="vendedor-name">${v.name}</div>
+        <div class="vendedor-bar-bg">
+          <div class="vendedor-bar-fill" style="width:${pct}%;background:${v.color}"></div>
+        </div>
+      </div>
+      <div class="vendedor-count">${v.total.toLocaleString('es-CL')}</div>
+    </div>`;
+});
+
+// ── MONTHLY 2026 CARDS ─────────────────────────────────
+const m26 = document.getElementById('monthly2026Cards');
+MONTHS_2026.forEach(m => {
+  const net = m.inst - m.ret;
+  const cls = net >= 0 ? 'up' : 'down';
+  m26.innerHTML += `
+    <div class="kpi-card ${net >= 0 ? 'purple' : 'rose'}" style="margin-bottom:0">
+      <div class="kpi-label">${m.mes} 2026</div>
+      <div class="kpi-value" style="font-size:28px">${(m.inst+m.ret+m.remp).toLocaleString('es-CL')}</div>
+      <div class="kpi-sub">Inst: <strong>${m.inst}</strong> · Ret: <strong>${m.ret}</strong> · Remp: <strong>${m.remp}</strong></div>
+      <div class="kpi-trend ${cls}">${net >= 0 ? '▲' : '▼'} Neto ${net >= 0 ? '+' : ''}${net}</div>
+    </div>`;
+});
+
+// ── GROWTH BARS ────────────────────────────────────────
+const gb = document.getElementById('growthBars');
+const maxNet = Math.max(...NET.map(Math.abs));
+YEARS.forEach((y, i) => {
+  const n = NET[i];
+  const pct = Math.round(Math.abs(n) / maxNet * 100);
+  const cls = n >= 0 ? 'positive' : 'negative';
+  gb.innerHTML += `
+    <div class="growth-year">
+      <span class="growth-label">${y}</span>
+      <div class="growth-bar-wrap">
+        <div class="growth-bar ${cls}" style="width:${pct}%">${Math.abs(n) > 30 ? (n > 0 ? '+' : '') + n : ''}</div>
+      </div>
+      <span class="growth-val ${cls}">${n > 0 ? '+' : ''}${n}</span>
+    </div>`;
+});
+
+// ── CHARTS ────────────────────────────────────────────
+
+// Annual
+new Chart(document.getElementById('annualChart'), {
+  type: 'bar',
+  data: {
+    labels: YEARS,
+    datasets: [
+      { label:'Instalaciones', data: INST, backgroundColor: 'rgba(167,139,250,0.8)', borderRadius: 6, borderSkipped: false },
+      { label:'Retiros',       data: RET,  backgroundColor: 'rgba(244,63,94,0.7)',   borderRadius: 6, borderSkipped: false },
+      { label:'Reemplazos',    data: REMP, backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6, borderSkipped: false },
+    ]
+  },
+  options: {
+    ...baseOpts,
+    plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#94a3b8', boxWidth: 10, padding: 16, font: { size: 12 } } } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } },
+      y: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } }
+    }
+  }
+});
+
+// Mix Donut
+const totalInst  = INST.reduce((a,b) => a+b, 0);
+const totalRet   = RET.reduce((a,b) => a+b, 0);
+const totalRemp  = REMP.reduce((a,b) => a+b, 0);
+new Chart(document.getElementById('mixChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Instalaciones','Retiros','Reemplazos'],
+    datasets: [{
+      data: [totalInst, totalRet, totalRemp],
+      backgroundColor: ['rgba(167,139,250,0.85)','rgba(244,63,94,0.85)','rgba(245,158,11,0.85)'],
+      borderColor: 'rgba(0,0,0,0)',
+      hoverOffset: 8,
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    ...baseOpts,
+    cutout: '68%',
+    plugins: {
+      ...baseOpts.plugins,
+      legend: { display: true, position: 'bottom', labels: { color: '#94a3b8', padding: 14, boxWidth: 10, font: { size: 12 } } }
+    }
+  }
+});
+
+// Monthly Line
+new Chart(document.getElementById('monthlyChart'), {
+  type: 'line',
+  data: {
+    labels: MONTHLY_LABELS,
+    datasets: [
+      {
+        label:'Instalaciones', data: M_INST,
+        borderColor: '#a78bfa', backgroundColor: 'rgba(167,139,250,0.12)',
+        borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 7,
+        tension: 0.4, fill: true
+      },
+      {
+        label:'Retiros', data: M_RET,
+        borderColor: '#f43f5e', backgroundColor: 'rgba(244,63,94,0.08)',
+        borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 7,
+        tension: 0.4, fill: true
+      },
+      {
+        label:'Reemplazos', data: M_REMP,
+        borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.06)',
+        borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 7,
+        tension: 0.4, fill: true
+      },
+    ]
+  },
+  options: {
+    ...baseOpts,
+    plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#94a3b8', boxWidth: 10, padding: 16, font: { size: 12 } } } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 }, maxRotation: 45 } },
+      y: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } }
+    }
+  }
+});
+
+// Monthly Total Bar
+new Chart(document.getElementById('monthlyTotalChart'), {
+  type: 'bar',
+  data: {
+    labels: MONTHLY_LABELS,
+    datasets: [{
+      label:'Total movimientos',
+      data: M_TOTAL,
+      backgroundColor: MONTHLY_LABELS.map(l => l.includes('26') ? 'rgba(6,182,212,0.7)' : 'rgba(167,139,250,0.6)'),
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    ...baseOpts,
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 }, maxRotation: 45 } },
+      y: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } }
+    }
+  }
+});
+
+// Top Clientes Horizontal Bar
+new Chart(document.getElementById('clientesChart'), {
+  type: 'bar',
+  data: {
+    labels: TOP_CLI,
+    datasets: [
+      { label:'Instalaciones', data: CLI_INST, backgroundColor: 'rgba(167,139,250,0.8)', borderRadius: 4 },
+      { label:'Retiros',       data: CLI_RET,  backgroundColor: 'rgba(244,63,94,0.7)',   borderRadius: 4 },
+      { label:'Reemplazos',    data: CLI_REMP, backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 4 },
+    ]
+  },
+  options: {
+    ...baseOpts,
+    indexAxis: 'y',
+    plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#94a3b8', boxWidth: 10, padding: 12, font: { size: 11 } } } },
+    scales: {
+      x: { stacked: true, grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } },
+      y: { stacked: true, grid: { color: gridColor }, ticks: { color: '#94a3b8', font: { size: 11 } } }
+    }
+  }
+});
+
+// Equipos Bar
+new Chart(document.getElementById('equiposChart'), {
+  type: 'bar',
+  data: {
+    labels: EQ_LABELS,
+    datasets: [{
+      label:'Instalaciones',
+      data: EQ_INST,
+      backgroundColor: [
+        'rgba(124,58,237,0.8)','rgba(6,182,212,0.8)','rgba(16,185,129,0.8)',
+        'rgba(245,158,11,0.8)','rgba(244,63,94,0.8)','rgba(167,139,250,0.8)',
+        'rgba(103,232,249,0.8)','rgba(252,211,77,0.8)'
+      ],
+      borderRadius: 8, borderSkipped: false
+    }]
+  },
+  options: {
+    ...baseOpts,
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: '#94a3b8', font: { size: 11 } } },
+      y: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } }
+    }
+  }
+});
+
+// Comunas
+new Chart(document.getElementById('comunasChart'), {
+  type: 'bar',
+  data: {
+    labels: COMUNAS,
+    datasets: [{
+      label:'Instalaciones',
+      data: COM_VALS,
+      backgroundColor: 'rgba(6,182,212,0.7)',
+      borderColor: 'rgba(6,182,212,1)',
+      borderWidth: 1,
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: {
+    ...baseOpts,
+    indexAxis: 'y',
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } },
+      y: { grid: { color: gridColor }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+    }
+  }
+});
+
+// Cliente Mix Donut (top 5)
+new Chart(document.getElementById('clienteMixChart'), {
+  type: 'doughnut',
+  data: {
+    labels: TOP_CLI.slice(0,6),
+    datasets: [{
+      data: TOP_CLI.slice(0,6).map((_,i) => CLI_INST[i]+CLI_RET[i]+CLI_REMP[i]),
+      backgroundColor: [
+        'rgba(167,139,250,0.85)','rgba(6,182,212,0.85)','rgba(16,185,129,0.85)',
+        'rgba(245,158,11,0.85)','rgba(244,63,94,0.85)','rgba(124,58,237,0.85)'
+      ],
+      borderColor: 'rgba(0,0,0,0)',
+      borderWidth: 0, hoverOffset: 8
+    }]
+  },
+  options: {
+    ...baseOpts,
+    cutout: '60%',
+    plugins: {
+      ...baseOpts.plugins,
+      legend: { display: true, position: 'bottom', labels: { color: '#94a3b8', padding: 10, boxWidth: 10, font: { size: 11 } } }
+    }
+  }
+});
+
+// Net Growth Bar
+new Chart(document.getElementById('netChart'), {
+  type: 'bar',
+  data: {
+    labels: YEARS,
+    datasets: [{
+      label:'Crecimiento neto',
+      data: NET,
+      backgroundColor: NET.map(v => v >= 0 ? 'rgba(16,185,129,0.75)' : 'rgba(244,63,94,0.75)'),
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: {
+    ...baseOpts,
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } },
+      y: {
+        grid: { color: gridColor },
+        ticks: { color: '#64748b', font: { size: 11 } },
+        grace: '10%'
+      }
+    }
+  }
+});
+
+// Flota Acumulada
+new Chart(document.getElementById('flotaChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [{
+      label:'Equipos en terreno',
+      data: FLOTA_ACUM,
+      borderColor: '#06b6d4',
+      backgroundColor: 'rgba(6,182,212,0.1)',
+      borderWidth: 3, pointRadius: 5, pointHoverRadius: 8,
+      tension: 0.3, fill: true
+    }]
+  },
+  options: {
+    ...baseOpts,
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } },
+      y: { grid: { color: gridColor }, ticks: { color: '#64748b', font: { size: 11 } } }
+    }
+  }
+});
+
+</script>
+</body>
+</html>

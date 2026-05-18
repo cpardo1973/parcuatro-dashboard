@@ -1,0 +1,18 @@
+# Datos sensibles — no subir al repo
+*.xlsx
+*.xls
+*.csv
+
+# Claude
+.claude/
+
+# macOS
+.DS_Store
+__MACOSX/
+
+# Thumbnails
+._*
+
+# Node (por si se agrega build tool)
+node_modules/
+.env
